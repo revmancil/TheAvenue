@@ -83,6 +83,12 @@ README.md         ← This file
 ## 🚀 Deployment
 Go to the **Publish tab** in Genspark to deploy. The site is served as a single `index.html` — no server configuration required.
 
+## 🔐 Supabase Foundation
+- Initial Supabase schema + RLS policies: `supabase/schema.sql`
+- Setup instructions: `SUPABASE_SETUP.md`
+- Frontend config template: `js/supabase-config.example.js`
+- Browser helper client: `js/supabase-client.js`
+
 ## 🏛️ Church Information
 - **Name**: Avenue Progressive Baptist Church / THE AVENUE
 - **Address**: 3745 Dildock Street, Dallas, TX 75215
