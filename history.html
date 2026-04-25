@@ -80,6 +80,14 @@
       transition: var(--ease);
     }
     .pastor-history-card:hover { background: var(--black-surface); transform: translateX(4px); }
+    .pastor-history-photo {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border: 1px solid var(--black-border);
+      margin-bottom: 16px;
+      background: var(--black-surface);
+    }
     .pastor-history-card h4 { color: var(--white); font-size: 1rem; margin-bottom: 4px; }
     .pastor-history-card .tenure { font-family: var(--font-heading); font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
     .pastor-history-card p { font-size: .88rem; color: var(--white-60); margin: 0; line-height: 1.65; }
@@ -198,8 +206,9 @@
         <div class="divider divider--left"></div>
         <p style="color:var(--text-muted);font-size:1rem;line-height:1.85;margin-bottom:40px;">These are the landmark moments that have defined the identity and direction of Avenue Progressive Baptist Church. Each milestone is a testament to the faithfulness of God and the commitment of His people.</p>
         <div style="background:var(--black);padding:32px 28px;border-left:3px solid var(--maroon);">
+          <img src="images/Pastors/eb-glenn.png" alt="Dr. E.B. Glenn, Founding Pastor" style="width:100%;max-width:240px;height:auto;object-fit:cover;border:1px solid rgba(255,255,255,.15);margin:0 0 18px 0;" />
           <p style="font-family:var(--font-display);font-size:1.2rem;color:var(--white-80);font-style:italic;margin-bottom:14px;line-height:1.5;">"God's faithfulness is not measured in months but in generations. THE AVENUE is a living testimony."</p>
-          <p style="font-family:var(--font-heading);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0;">— Dr. Mancil Carroll III</p>
+          <p style="font-family:var(--font-heading);font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0;">— Dr. E.B Glenn - Founding Pastor</p>
         </div>
       </div>
       <div class="fade-in">
@@ -246,32 +255,34 @@
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;" class="pastors-grid fade-in">
       <div class="pastor-history-card">
-        <h4>[ Founding Pastor ]</h4>
+        <img src="images/Pastors/eb-glenn-2.png" alt="Dr. E.B. Glenn, Founding Pastor" class="pastor-history-photo" />
+        <h4>Dr. E.B. Glenn</h4>
         <div class="tenure">1961 – [ Year ] · Founding Pastor</div>
         <p>The founding shepherd of Avenue Progressive Baptist Church whose vision and faith gave birth to a ministry that would serve South Dallas for generations. <em style="color:rgba(255,255,255,.3);font-size:.8rem;">[Add founding pastor's name and details]</em></p>
       </div>
       <div class="pastor-history-card">
-        <h4>[ Pastor 2 ]</h4>
+        <img src="images/Pastors/pastor-vernon.png" alt="Pastor Vernon" class="pastor-history-photo" />
+        <h4>Pastor Vernon</h4>
         <div class="tenure">[ Year ] – [ Year ] · Second Pastor</div>
         <p>Continued the work of building a strong, discipleship-focused congregation in South Dallas, growing the church's ministries and community presence. <em style="color:rgba(255,255,255,.3);font-size:.8rem;">[Add name and details]</em></p>
       </div>
       <div class="pastor-history-card">
-        <h4>[ Pastor 3 ]</h4>
+        <img src="images/Pastors/elmer-rogers.jpg" alt="Pastor Elmer Rogers" class="pastor-history-photo" />
+        <h4>Pastor Elmer Rogers</h4>
         <div class="tenure">[ Year ] – [ Year ] · Third Pastor</div>
         <p>Led the church through seasons of growth and expansion, strengthening the foundations of worship, discipleship, and community outreach across South Dallas. <em style="color:rgba(255,255,255,.3);font-size:.8rem;">[Add name and details]</em></p>
       </div>
       <div class="pastor-history-card">
-        <h4>[ Pastor 4 ]</h4>
+        <img src="images/Pastors/pastor-shaw.png" alt="Pastor Shaw" class="pastor-history-photo" />
+        <h4>Pastor Shaw</h4>
         <div class="tenure">[ Year ] – [ Year ] · Fourth Pastor</div>
         <p>A season of renewal and vision under this faithful shepherd, whose commitment to the Word of God and the people of South Dallas left a lasting legacy. <em style="color:rgba(255,255,255,.3);font-size:.8rem;">[Add name and details]</em></p>
       </div>
       <div class="pastor-history-card" style="border-left-color:var(--gold);">
+        <img src="images/Pastors/pastor-carroll-portrait.png" alt="Dr. Mancil Carroll III" class="pastor-history-photo" />
         <h4>Dr. Mancil Carroll III</h4>
         <div class="tenure" style="color:var(--gold);">May 2025 – Present · Senior Pastor</div>
         <p>Elected Senior Pastor in May 2025, Dr. Carroll brings vision, biblical depth, and a heart for discipleship and community transformation to THE AVENUE.</p>
-      </div>
-      <div class="pastor-history-card" style="background:transparent;border:1px dashed var(--black-border);border-left:3px dashed var(--maroon);display:flex;align-items:center;justify-content:center;min-height:140px;">
-        <p style="color:rgba(255,255,255,.25);font-size:.85rem;text-align:center;margin:0;padding:20px;">[ Update with full pastoral history — names, years, and notes ]</p>
       </div>
     </div>
   </div>
