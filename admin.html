@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | THE AVENUE</title>
+  <style>
+    :root {
+      --bg: #0f0f10;
+      --panel: #1a1a1d;
+      --panel-2: #232328;
+      --text: #f3f3f5;
+      --muted: #b8b8c2;
+      --maroon: #7b1c1c;
+      --maroon-dark: #5a1212;
+      --gold: #c9a84c;
+      --border: #2d2d35;
+      --success: #1f7a3d;
+      --danger: #9d2d2d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    h1, h2, h3 { margin: 0; }
+    h1 { font-size: 1.5rem; }
+    .muted { color: var(--muted); }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 16px;
+      border-radius: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .field { margin-bottom: 10px; }
+    label {
+      display: block;
+      font-size: 0.83rem;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+    input, textarea, button, select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: inherit;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .btn {
+      background: var(--maroon);
+      border-color: var(--maroon);
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn:hover { background: var(--maroon-dark); }
+    .btn-secondary {
+      background: transparent;
+      border-color: var(--gold);
+      color: var(--gold);
+      cursor: pointer;
+      width: auto;
+      padding: 8px 12px;
+    }
+    .row-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .small-btn {
+      width: auto;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .small-btn.danger { background: var(--danger); border-color: var(--danger); }
+    .small-btn.success { background: var(--success); border-color: var(--success); }
+    .items {
+      display: grid;
+      gap: 10px;
+    }
+    .item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      background: #19191e;
+    }
+    #authView, #adminView { display: none; }
+    #status {
+      margin: 10px 0 0;
+      font-size: 0.92rem;
+      color: var(--gold);
+      min-height: 20px;
+    }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>THE AVENUE Admin</h1>
+      <a href="index.html" class="muted">Back to Website</a>
+    </div>
+
+    <section id="authView" class="panel">
+      <h2 style="margin-bottom: 10px;">Admin Login</h2>
+      <p class="muted">Sign in with your admin account.</p>
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" required />
+        </div>
+        <button class="btn" type="submit">Log In</button>
+      </form>
+      <p id="status"></p>
+    </section>
+
+    <section id="adminView">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+          <div>
+            <h2 id="welcomeName">Welcome, Admin</h2>
+            <p class="muted">Manage events, ministries, and member directory.</p>
+          </div>
+          <button id="logoutBtn" class="btn-secondary" type="button">Log Out</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="panel">
+          <h3 id="eventFormTitle" style="margin-bottom:10px;">Create Event</h3>
+          <form id="eventForm">
+            <input id="eventId" type="hidden" />
+            <div class="field"><label>Title</label><input id="eventTitle" required /></div>
+            <div class="field"><label>Description</label><textarea id="eventDescription"></textarea></div>
+            <div class="field"><label>Date & Time</label><input id="eventDate" type="datetime-local" required /></div>
+            <div class="field"><label>Location</label><input id="eventLocation" /></div>
+            <div class="field"><label>Category</label><input id="eventCategory" placeholder="worship, ministry, community" /></div>
+            <div class="field"><label>Image URL (optional)</label><input id="eventImage" /></div>
+            <div class="field">
+              <label><input id="eventPublished" type="checkbox" checked style="width:auto;margin-right:8px;" /> Published</label>
+            </div>
+            <div class="row-actions">
+              <button class="btn" id="eventSubmitBtn" type="submit">Create Event</button>
+              <button class="btn-secondary" id="eventCancelEditBtn" type="button">Cancel Edit</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <h3 id="ministryFormTitle" style="margin-bottom:10px;">Create Ministry</h3>
+          <form id="ministryForm">
+            <input id="ministryId" type="hidden" />
+            <div class="field"><label>Name</label><input id="ministryName" required /></div>
+            <div class="field"><label>Description</label><textarea id="ministryDescription"></textarea></div>
+            <div class="field"><label>Schedule</label><input id="ministrySchedule" /></div>
+            <div class="field"><label>Leader Name</label><input id="ministryLeader" /></div>
+            <div class="field"><label>Image URL (optional)</label><input id="ministryImage" /></div>
+            <div class="field">
+              <label><input id="ministryPublished" type="checkbox" checked style="width:auto;margin-right:8px;" /> Published</label>
+            </div>
+            <div class="row-actions">
+              <button class="btn" id="ministrySubmitBtn" type="submit">Create Ministry</button>
+              <button class="btn-secondary" id="ministryCancelEditBtn" type="button">Cancel Edit</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <div class="grid">
+        <section class="panel">
+          <h3 style="margin-bottom:10px;">Events</h3>
+          <div id="eventsList" class="items"></div>
+        </section>
+        <section class="panel">
+          <h3 style="margin-bottom:10px;">Ministries</h3>
+          <div id="ministriesList" class="items"></div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <h3 id="directoryFormTitle" style="margin-bottom:10px;">Directory Entry</h3>
+        <form id="directoryForm">
+          <div class="grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
+            <div class="field">
+              <label>Profile UUID</label>
+              <input id="dirProfileId" required />
+            </div>
+            <div class="field">
+              <label>Display Name</label>
+              <input id="dirDisplayName" required />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input id="dirEmail" type="email" />
+            </div>
+            <div class="field">
+              <label>Phone</label>
+              <input id="dirPhone" />
+            </div>
+            <div class="field">
+              <label>Household</label>
+              <input id="dirHousehold" />
+            </div>
+            <div class="field">
+              <label>Photo URL</label>
+              <input id="dirPhoto" />
+            </div>
+          </div>
+          <div class="field"><label>Bio</label><textarea id="dirBio"></textarea></div>
+          <div class="field">
+            <label><input id="dirVisible" type="checkbox" checked style="width:auto;margin-right:8px;" /> Visible in member directory</label>
+          </div>
+          <div class="row-actions">
+            <button class="btn" id="directorySubmitBtn" type="submit">Save Directory Entry</button>
+            <button class="btn-secondary" id="directoryCancelEditBtn" type="button">Clear</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h3 style="margin-bottom:10px;">Member Directory</h3>
+        <div id="directoryList" class="items"></div>
+      </section>
+
+      <p id="statusAdmin"></p>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script>
+    const authView = document.getElementById("authView");
+    const adminView = document.getElementById("adminView");
+    const statusEl = document.getElementById("status");
+    const statusAdminEl = document.getElementById("statusAdmin");
+    const welcomeName = document.getElementById("welcomeName");
+
+    function setStatus(message, isError) {
+      statusEl.textContent = message || "";
+      statusEl.style.color = isError ? "#ff8b8b" : "var(--gold)";
+    }
+
+    function setAdminStatus(message, isError) {
+      statusAdminEl.textContent = message || "";
+      statusAdminEl.style.color = isError ? "#ff8b8b" : "var(--gold)";
+    }
+
+    function showAuth() {
+      authView.style.display = "block";
+      adminView.style.display = "none";
+    }
+
+    function showAdmin() {
+      authView.style.display = "none";
+      adminView.style.display = "block";
+    }
+
+    function formatDateTimeLocal(isoString) {
+      if (!isoString) return "";
+      const d = new Date(isoString);
+      const pad = (n) => String(n).padStart(2, "0");
+      return (
+        d.getFullYear() + "-" +
+        pad(d.getMonth() + 1) + "-" +
+        pad(d.getDate()) + "T" +
+        pad(d.getHours()) + ":" +
+        pad(d.getMinutes())
+      );
+    }
+
+    function clearEventForm() {
+      document.getElementById("eventForm").reset();
+      document.getElementById("eventId").value = "";
+      document.getElementById("eventFormTitle").textContent = "Create Event";
+      document.getElementById("eventSubmitBtn").textContent = "Create Event";
+      document.getElementById("eventPublished").checked = true;
+    }
+
+    function clearMinistryForm() {
+      document.getElementById("ministryForm").reset();
+      document.getElementById("ministryId").value = "";
+      document.getElementById("ministryFormTitle").textContent = "Create Ministry";
+      document.getElementById("ministrySubmitBtn").textContent = "Create Ministry";
+      document.getElementById("ministryPublished").checked = true;
+    }
+
+    function clearDirectoryForm() {
+      document.getElementById("directoryForm").reset();
+      document.getElementById("directoryFormTitle").textContent = "Directory Entry";
+      document.getElementById("directorySubmitBtn").textContent = "Save Directory Entry";
+      document.getElementById("dirVisible").checked = true;
+    }
+
+    async function enforceAdmin() {
+      if (!window.supabaseClient || !window.authApi) {
+        setStatus("Supabase is not initialized. Check js/supabase-config.js.", true);
+        showAuth();
+        return;
+      }
+
+      const sessionResult = await window.authApi.getSession();
+      const session = sessionResult?.data?.session;
+      if (!session) {
+        showAuth();
+        return;
+      }
+
+      const profileResult = await window.authApi.getProfile();
+      const profile = profileResult?.data;
+      if (!profile || profile.role !== "admin") {
+        showAuth();
+        setStatus("Your account is not an admin.", true);
+        await window.authApi.signOut();
+        return;
+      }
+
+      welcomeName.textContent = "Welcome, " + (profile.full_name || "Admin");
+      showAdmin();
+      await Promise.all([loadEvents(), loadMinistries(), loadDirectory()]);
+    }
+
+    async function loadEvents() {
+      const eventsList = document.getElementById("eventsList");
+      const { data, error } = await window.supabaseClient
+        .from("events")
+        .select("id, title, description, event_date, location, category, image_url, is_published")
+        .order("event_date", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        eventsList.innerHTML = "<p class='muted'>Error loading events.</p>";
+        return;
+      }
+      if (!data || data.length === 0) {
+        eventsList.innerHTML = "<p class='muted'>No events yet.</p>";
+        return;
+      }
+
+      eventsList.innerHTML = data.map((event) => {
+        const dateText = event.event_date ? new Date(event.event_date).toLocaleString() : "No date";
+        return `
+          <div class="item">
+            <div><strong>${event.title}</strong></div>
+            <div class="muted">${dateText} • ${event.location || "No location"} • ${event.category || "general"}</div>
+            <div class="row-actions" style="margin-top:8px;">
+              <button class="small-btn" data-event-edit="${event.id}">Edit</button>
+              <button class="small-btn success" data-event-publish="${event.id}" data-current="${event.is_published}">
+                ${event.is_published ? "Unpublish" : "Publish"}
+              </button>
+              <button class="small-btn danger" data-event-delete="${event.id}">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function loadMinistries() {
+      const ministriesList = document.getElementById("ministriesList");
+      const { data, error } = await window.supabaseClient
+        .from("ministries")
+        .select("id, name, description, schedule, leader_name, image_url, is_published")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        ministriesList.innerHTML = "<p class='muted'>Error loading ministries.</p>";
+        return;
+      }
+      if (!data || data.length === 0) {
+        ministriesList.innerHTML = "<p class='muted'>No ministries yet.</p>";
+        return;
+      }
+
+      ministriesList.innerHTML = data.map((ministry) => `
+        <div class="item">
+          <div><strong>${ministry.name}</strong></div>
+          <div class="muted">${ministry.schedule || "No schedule set"} • ${ministry.leader_name || "No leader"}</div>
+          <div class="row-actions" style="margin-top:8px;">
+            <button class="small-btn" data-ministry-edit="${ministry.id}">Edit</button>
+            <button class="small-btn success" data-ministry-publish="${ministry.id}" data-current="${ministry.is_published}">
+              ${ministry.is_published ? "Unpublish" : "Publish"}
+            </button>
+            <button class="small-btn danger" data-ministry-delete="${ministry.id}">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function loadDirectory() {
+      const directoryList = document.getElementById("directoryList");
+      const { data, error } = await window.supabaseClient
+        .from("directory_entries")
+        .select("profile_id, display_name, email, phone, household, bio, photo_url, is_visible, updated_at")
+        .order("updated_at", { ascending: false })
+        .limit(100);
+
+      if (error) {
+        directoryList.innerHTML = "<p class='muted'>Error loading directory.</p>";
+        return;
+      }
+      if (!data || data.length === 0) {
+        directoryList.innerHTML = "<p class='muted'>No directory entries yet.</p>";
+        return;
+      }
+
+      directoryList.innerHTML = data.map((entry) => `
+        <div class="item">
+          <div><strong>${entry.display_name}</strong> <span class="muted">(${entry.profile_id})</span></div>
+          <div class="muted">${entry.email || "No email"} • ${entry.phone || "No phone"} • ${entry.household || "No household"}</div>
+          <div class="muted">Visible: ${entry.is_visible ? "Yes" : "No"}</div>
+          <div class="row-actions" style="margin-top:8px;">
+            <button class="small-btn" data-directory-edit="${entry.profile_id}">Edit</button>
+            <button class="small-btn success" data-directory-visibility="${entry.profile_id}" data-current="${entry.is_visible}">
+              ${entry.is_visible ? "Hide" : "Show"}
+            </button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      setStatus("Logging in...");
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const { error } = await window.authApi.signIn(email, password);
+      if (error) return setStatus(error.message, true);
+      setStatus("");
+      await enforceAdmin();
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await window.authApi.signOut();
+      showAuth();
+      setStatus("Logged out.");
+    });
+
+    document.getElementById("eventCancelEditBtn").addEventListener("click", clearEventForm);
+    document.getElementById("ministryCancelEditBtn").addEventListener("click", clearMinistryForm);
+    document.getElementById("directoryCancelEditBtn").addEventListener("click", clearDirectoryForm);
+
+    document.getElementById("eventForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("eventId").value;
+      const payload = {
+        title: document.getElementById("eventTitle").value.trim(),
+        description: document.getElementById("eventDescription").value.trim(),
+        event_date: new Date(document.getElementById("eventDate").value).toISOString(),
+        location: document.getElementById("eventLocation").value.trim(),
+        category: document.getElementById("eventCategory").value.trim() || "general",
+        image_url: document.getElementById("eventImage").value.trim() || null,
+        is_published: document.getElementById("eventPublished").checked,
+      };
+
+      setAdminStatus(id ? "Updating event..." : "Creating event...");
+      const query = id
+        ? window.supabaseClient.from("events").update(payload).eq("id", id)
+        : window.supabaseClient.from("events").insert(payload);
+      const { error } = await query;
+      if (error) return setAdminStatus(error.message, true);
+
+      setAdminStatus(id ? "Event updated." : "Event created.");
+      clearEventForm();
+      await loadEvents();
+    });
+
+    document.getElementById("ministryForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("ministryId").value;
+      const payload = {
+        name: document.getElementById("ministryName").value.trim(),
+        description: document.getElementById("ministryDescription").value.trim(),
+        schedule: document.getElementById("ministrySchedule").value.trim(),
+        leader_name: document.getElementById("ministryLeader").value.trim(),
+        image_url: document.getElementById("ministryImage").value.trim() || null,
+        is_published: document.getElementById("ministryPublished").checked,
+      };
+
+      setAdminStatus(id ? "Updating ministry..." : "Creating ministry...");
+      const query = id
+        ? window.supabaseClient.from("ministries").update(payload).eq("id", id)
+        : window.supabaseClient.from("ministries").insert(payload);
+      const { error } = await query;
+      if (error) return setAdminStatus(error.message, true);
+
+      setAdminStatus(id ? "Ministry updated." : "Ministry created.");
+      clearMinistryForm();
+      await loadMinistries();
+    });
+
+    document.getElementById("directoryForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const profileId = document.getElementById("dirProfileId").value.trim();
+      const payload = {
+        profile_id: profileId,
+        display_name: document.getElementById("dirDisplayName").value.trim(),
+        email: document.getElementById("dirEmail").value.trim() || null,
+        phone: document.getElementById("dirPhone").value.trim() || null,
+        household: document.getElementById("dirHousehold").value.trim() || null,
+        bio: document.getElementById("dirBio").value.trim() || null,
+        photo_url: document.getElementById("dirPhoto").value.trim() || null,
+        is_visible: document.getElementById("dirVisible").checked,
+      };
+
+      setAdminStatus("Saving directory entry...");
+      const { error } = await window.supabaseClient.from("directory_entries").upsert(payload);
+      if (error) return setAdminStatus(error.message, true);
+
+      setAdminStatus("Directory entry saved.");
+      clearDirectoryForm();
+      await loadDirectory();
+    });
+
+    document.addEventListener("click", async (e) => {
+      const eventDeleteId = e.target.getAttribute("data-event-delete");
+      const eventPublishId = e.target.getAttribute("data-event-publish");
+      const eventEditId = e.target.getAttribute("data-event-edit");
+      const ministryDeleteId = e.target.getAttribute("data-ministry-delete");
+      const ministryPublishId = e.target.getAttribute("data-ministry-publish");
+      const ministryEditId = e.target.getAttribute("data-ministry-edit");
+      const directoryEditId = e.target.getAttribute("data-directory-edit");
+      const directoryVisibilityId = e.target.getAttribute("data-directory-visibility");
+
+      if (eventDeleteId) {
+        if (!window.confirm("Delete this event?")) return;
+        const { error } = await window.supabaseClient.from("events").delete().eq("id", eventDeleteId);
+        if (error) return setAdminStatus(error.message, true);
+        setAdminStatus("Event deleted.");
+        await loadEvents();
+      }
+      if (eventPublishId) {
+        const current = e.target.getAttribute("data-current") === "true";
+        const { error } = await window.supabaseClient.from("events").update({ is_published: !current }).eq("id", eventPublishId);
+        if (error) return setAdminStatus(error.message, true);
+        setAdminStatus("Event visibility updated.");
+        await loadEvents();
+      }
+      if (eventEditId) {
+        const { data, error } = await window.supabaseClient.from("events").select("*").eq("id", eventEditId).single();
+        if (error || !data) return setAdminStatus("Unable to load event for editing.", true);
+        document.getElementById("eventId").value = data.id;
+        document.getElementById("eventTitle").value = data.title || "";
+        document.getElementById("eventDescription").value = data.description || "";
+        document.getElementById("eventDate").value = formatDateTimeLocal(data.event_date);
+        document.getElementById("eventLocation").value = data.location || "";
+        document.getElementById("eventCategory").value = data.category || "";
+        document.getElementById("eventImage").value = data.image_url || "";
+        document.getElementById("eventPublished").checked = !!data.is_published;
+        document.getElementById("eventFormTitle").textContent = "Edit Event";
+        document.getElementById("eventSubmitBtn").textContent = "Update Event";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      if (ministryDeleteId) {
+        if (!window.confirm("Delete this ministry?")) return;
+        const { error } = await window.supabaseClient.from("ministries").delete().eq("id", ministryDeleteId);
+        if (error) return setAdminStatus(error.message, true);
+        setAdminStatus("Ministry deleted.");
+        await loadMinistries();
+      }
+      if (ministryPublishId) {
+        const current = e.target.getAttribute("data-current") === "true";
+        const { error } = await window.supabaseClient.from("ministries").update({ is_published: !current }).eq("id", ministryPublishId);
+        if (error) return setAdminStatus(error.message, true);
+        setAdminStatus("Ministry visibility updated.");
+        await loadMinistries();
+      }
+      if (ministryEditId) {
+        const { data, error } = await window.supabaseClient.from("ministries").select("*").eq("id", ministryEditId).single();
+        if (error || !data) return setAdminStatus("Unable to load ministry for editing.", true);
+        document.getElementById("ministryId").value = data.id;
+        document.getElementById("ministryName").value = data.name || "";
+        document.getElementById("ministryDescription").value = data.description || "";
+        document.getElementById("ministrySchedule").value = data.schedule || "";
+        document.getElementById("ministryLeader").value = data.leader_name || "";
+        document.getElementById("ministryImage").value = data.image_url || "";
+        document.getElementById("ministryPublished").checked = !!data.is_published;
+        document.getElementById("ministryFormTitle").textContent = "Edit Ministry";
+        document.getElementById("ministrySubmitBtn").textContent = "Update Ministry";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      if (directoryEditId) {
+        const { data, error } = await window.supabaseClient
+          .from("directory_entries")
+          .select("*")
+          .eq("profile_id", directoryEditId)
+          .single();
+        if (error || !data) return setAdminStatus("Unable to load directory entry.", true);
+        document.getElementById("dirProfileId").value = data.profile_id || "";
+        document.getElementById("dirDisplayName").value = data.display_name || "";
+        document.getElementById("dirEmail").value = data.email || "";
+        document.getElementById("dirPhone").value = data.phone || "";
+        document.getElementById("dirHousehold").value = data.household || "";
+        document.getElementById("dirBio").value = data.bio || "";
+        document.getElementById("dirPhoto").value = data.photo_url || "";
+        document.getElementById("dirVisible").checked = !!data.is_visible;
+        document.getElementById("directoryFormTitle").textContent = "Edit Directory Entry";
+        document.getElementById("directorySubmitBtn").textContent = "Update Directory Entry";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      if (directoryVisibilityId) {
+        const current = e.target.getAttribute("data-current") === "true";
+        const { error } = await window.supabaseClient
+          .from("directory_entries")
+          .update({ is_visible: !current })
+          .eq("profile_id", directoryVisibilityId);
+        if (error) return setAdminStatus(error.message, true);
+        setAdminStatus("Directory visibility updated.");
+        await loadDirectory();
+      }
+    });
+
+    enforceAdmin();
+  </script>
+</body>
+</html>
