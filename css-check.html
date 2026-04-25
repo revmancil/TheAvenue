@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Production Check - THE AVENUE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/main.css?v=10" />
+  <link rel="stylesheet" href="css/responsive.css?v=10" />
+</head>
+<body>
+  <div class="container" style="padding-top:40px;">
+    <h1 id="result" style="color:red;font-family:monospace;">CSS NOT LOADED</h1>
+    <div id="tests"></div>
+
+    <div style="margin-top:40px;">
+      <div class="btn btn-maroon" id="testBtn">Button Test</div>
+      <div style="height:20px;"></div>
+      <div class="quick-bar" style="position:relative;">
+        <div class="quick-bar__inner">
+          <a href="#" class="quick-bar__item">
+            <div class="quick-bar__icon-wrap">&#128197;</div>
+            <div class="quick-bar__text">
+              <div class="quick-bar__title">Test Item</div>
+              <div class="quick-bar__sub">Quick bar test</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div style="height:20px;"></div>
+      <div class="footer__inner" style="padding:20px;background:#080808;">
+        <div class="footer__col-heading">Footer Test</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('load', function() {
+      var results = [];
+      var passed = 0;
+
+      function check(label, el, prop, expected) {
+        if (!el) { results.push({ label: label, ok: false, val: 'Element not found' }); return; }
+        var computed = getComputedStyle(el)[prop];
+        var ok = computed === expected || computed.includes(expected.replace(/\s/g, ''));
+        if (ok) passed++;
+        results.push({ label: label, ok: ok, val: computed, expected: expected });
+      }
+
+      // Check CSS variables are defined
+      var rootStyle = getComputedStyle(document.documentElement);
+      var maroon = rootStyle.getPropertyValue('--maroon').trim();
+      var gold = rootStyle.getPropertyValue('--gold').trim();
+      var white50 = rootStyle.getPropertyValue('--white-50').trim();
+      var white30 = rootStyle.getPropertyValue('--white-30').trim();
+      var fontHeading = rootStyle.getPropertyValue('--font-heading').trim();
+
+      results.push({ label: '--maroon defined', ok: maroon !== '', val: maroon });
+      results.push({ label: '--gold defined', ok: gold !== '', val: gold });
+      results.push({ label: '--white-50 defined', ok: white50 !== '', val: white50 });
+      results.push({ label: '--white-30 defined', ok: white30 !== '', val: white30 });
+      results.push({ label: '--font-heading defined', ok: fontHeading !== '', val: fontHeading });
+      if (maroon !== '') passed += 5;
+
+      // Check btn-maroon background
+      var btn = document.getElementById('testBtn');
+      if (btn) {
+        var btnBg = getComputedStyle(btn).backgroundColor;
+        results.push({ label: '.btn-maroon background', ok: btnBg === 'rgb(123, 28, 28)', val: btnBg });
+        if (btnBg === 'rgb(123, 28, 28)') passed++;
+      }
+
+      // Check stylesheet count
+      var sheets = document.styleSheets.length;
+      results.push({ label: 'Stylesheets loaded', ok: sheets >= 2, val: sheets + ' sheets' });
+      if (sheets >= 2) passed++;
+
+      // Check body font
+      var bodyFont = getComputedStyle(document.body).fontFamily;
+      results.push({ label: 'Body font', ok: bodyFont.toLowerCase().includes('inter') || bodyFont.toLowerCase().includes('system'), val: bodyFont });
+      if (bodyFont.toLowerCase().includes('inter') || bodyFont.toLowerCase().includes('system')) passed++;
+
+      // Check container max-width
+      var container = document.querySelector('.container');
+      if (container) {
+        var mw = getComputedStyle(container).maxWidth;
+        results.push({ label: '.container max-width', ok: mw === '1180px', val: mw });
+        if (mw === '1180px') passed++;
+      }
+
+      // Log to console for capture
+      results.forEach(function(r) {
+        console.log((r.ok ? 'PASS' : 'FAIL') + ' | ' + r.label + ' | ' + (r.val || ''));
+      });
+      console.log('TOTAL: ' + passed + '/' + results.length + ' passed');
+
+      // Render results
+      var total = results.length;
+      var h1 = document.getElementById('result');
+      if (passed === total) {
+        h1.style.color = 'green';
+        h1.textContent = 'ALL CSS CHECKS PASSED (' + passed + '/' + total + ')';
+      } else {
+        h1.style.color = 'orange';
+        h1.textContent = 'CSS PARTIAL: ' + passed + '/' + total + ' checks passed';
+      }
+
+      var html = '<table style="border-collapse:collapse;width:100%;font-family:monospace;font-size:13px;">';
+      html += '<tr style="background:#eee;"><th style="padding:6px 12px;text-align:left;">Check</th><th style="padding:6px 12px;text-align:left;">Value</th><th style="padding:6px 12px;">Status</th></tr>';
+      results.forEach(function(r) {
+        html += '<tr style="border-bottom:1px solid #ddd;">';
+        html += '<td style="padding:6px 12px;">' + r.label + '</td>';
+        html += '<td style="padding:6px 12px;color:#666;">' + (r.val || '') + '</td>';
+        html += '<td style="padding:6px 12px;text-align:center;">' + (r.ok ? '&#9989;' : '&#10060;') + '</td>';
+        html += '</tr>';
+      });
+      html += '</table>';
+      document.getElementById('tests').innerHTML = html;
+    });
+  </script>
+</body>
+</html>

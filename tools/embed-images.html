@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Embed Images as Base64</title>
+<style>
+body{font-family:monospace;padding:20px;background:#111;color:#0f0;}
+button{margin:6px;padding:8px 16px;background:#1a1a1a;color:#0f0;border:1px solid #0f0;cursor:pointer;}
+textarea{width:100%;height:120px;background:#0a0a0a;color:#0f0;font-size:11px;border:1px solid #333;margin-top:6px;}
+.status{color:#ff0;margin:4px 0;}
+</style>
+</head>
+<body>
+<h2>Image Base64 Embedder</h2>
+<p>Click each button to fetch the image and get its base64 data URI:</p>
+
+<button onclick="fetchImg('images/logo.png','logo')">Get logo.png</button>
+<button onclick="fetchImg('images/pastor-carroll.png','pastor')">Get pastor-carroll.png</button>
+<button onclick="fetchImg('images/church-building.jpg','church')">Get church-building.jpg</button>
+<button onclick="fetchImg('images/original-avenue.png','original')">Get original-avenue.png</button>
+<br>
+<div id="status" class="status">Ready.</div>
+
+<div id="logo-block" style="display:none">
+  <b>logo.png base64 (copy ALL of this):</b><br>
+  <textarea id="logo-out"></textarea>
+  <span id="logo-len"></span>
+</div>
+<div id="pastor-block" style="display:none">
+  <b>pastor-carroll.png base64:</b><br>
+  <textarea id="pastor-out"></textarea>
+  <span id="pastor-len"></span>
+</div>
+<div id="church-block" style="display:none">
+  <b>church-building.jpg base64:</b><br>
+  <textarea id="church-out"></textarea>
+  <span id="church-len"></span>
+</div>
+<div id="original-block" style="display:none">
+  <b>original-avenue.png base64:</b><br>
+  <textarea id="original-out"></textarea>
+  <span id="original-len"></span>
+</div>
+
+<script>
+async function fetchImg(src, key) {
+  document.getElementById('status').textContent = 'Fetching ' + src + '...';
+  try {
+    const resp = await fetch(src);
+    if (!resp.ok) { document.getElementById('status').textContent = 'ERROR: ' + resp.status + ' for ' + src; return; }
+    const blob = await resp.blob();
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const b64 = e.target.result;
+      document.getElementById(key+'-out').value = b64;
+      document.getElementById(key+'-len').textContent = ' Length: ' + b64.length;
+      document.getElementById(key+'-block').style.display = 'block';
+      document.getElementById('status').textContent = 'Done: ' + src + ' (' + b64.length + ' chars)';
+    };
+    reader.readAsDataURL(blob);
+  } catch(err) {
+    document.getElementById('status').textContent = 'FETCH ERROR: ' + err.message;
+  }
+}
+</script>
+</body>
+</html>

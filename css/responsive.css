@@ -1,0 +1,197 @@
+/* THE AVENUE - Avenue Progressive Baptist Church - Responsive Styles */
+/* Version: 10 - Production Clean Build */
+
+/* ==========================================
+   TABLET (max-width: 1100px)
+   ========================================== */
+@media (max-width: 1100px) {
+  .hero__content {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 140px 32px 80px;
+    min-height: auto;
+  }
+  .hero__left        { text-align: center; align-items: center; }
+  .hero__eyebrow     { justify-content: center; }
+  .hero__desc        { max-width: 520px; }
+  .hero__ctas        { justify-content: center; }
+  .hero__panel       { max-width: 520px; margin: 0 auto; width: 100%; }
+  .hero__scroll      { display: none; }
+
+  .quick-bar__inner  { grid-template-columns: repeat(2, 1fr); }
+  .quick-bar__item   { border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+  .welcome-split     { grid-template-columns: 1fr; }
+  .welcome-split__content { padding: 60px 52px; }
+
+  .pastor-feature    { grid-template-columns: 1fr; }
+  .pastor-feature__dark  { padding: 64px 52px; order: 2; }
+  .pastor-feature__photo { min-height: 400px; order: 1; }
+
+  .ministry-grid     { grid-template-columns: repeat(2, 1fr); }
+  .events-row        { grid-template-columns: repeat(2, 1fr); }
+  .expect-grid       { grid-template-columns: repeat(2, 1fr); }
+
+  .history-band__inner { grid-template-columns: 1fr 320px; gap: 48px; }
+
+  .footer__inner     { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+
+/* ==========================================
+   TABLET / MOBILE (max-width: 768px)
+   ========================================== */
+@media (max-width: 768px) {
+  /* Typography */
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 2rem; }
+  .headline-xl { font-size: clamp(3rem, 14vw, 5rem); }
+  .headline-lg { font-size: clamp(2.2rem, 10vw, 3.8rem); }
+
+  /* Spacing */
+  .section-pad      { padding: 72px 0; }
+  .section-pad--sm  { padding: 48px 0; }
+
+  /* Container */
+  .container,
+  .container--wide,
+  .container--narrow { padding: 0 20px; }
+
+  /* Navbar */
+  .navbar__nav                { display: none; }
+  .navbar__actions .btn       { display: none; }
+  .navbar__toggle             { display: flex; }
+  .navbar                     { padding: 0 20px; }
+
+  /* Hero */
+  .hero                       { min-height: 100svh; }
+  .hero__content              { padding: 110px 20px 64px; gap: 36px; }
+  .hero__title                { font-size: clamp(4rem, 18vw, 7rem); }
+  .hero__title-accent         { font-size: clamp(1.4rem, 7vw, 2.4rem); }
+  .hero__desc                 { font-size: 0.95rem; max-width: 100%; }
+  .hero__ctas                 { flex-direction: column; align-items: stretch; }
+  .hero__ctas .btn            { justify-content: center; }
+  .hero__panel                { padding: 32px 24px; }
+  .hero__panel-title          { margin-bottom: 20px; padding-bottom: 12px; }
+  .hero__service-row          { gap: 12px; padding: 14px 0; }
+  .hero__service-time         { font-size: 1rem; }
+
+  /* Quick bar */
+  .quick-bar__inner           { grid-template-columns: 1fr; }
+  .quick-bar__item            { border-right: none; }
+
+  /* Welcome */
+  .welcome-split__content     { padding: 48px 28px; }
+
+  /* Expect */
+  .expect-grid                { grid-template-columns: 1fr; }
+
+  /* Ministries (homepage tiles) */
+  .ministry-grid              { grid-template-columns: 1fr; }
+
+  /* Events */
+  .events-row                 { grid-template-columns: 1fr; }
+
+  /* History */
+  .history-band__inner        { grid-template-columns: 1fr; gap: 40px; }
+  .history-band::before       { display: none; }
+  .history-img                { min-height: 280px; }
+
+  /* Newsletter */
+  .newsletter-band__inner     { flex-direction: column; gap: 40px; }
+  .newsletter-band__form form { flex-direction: column; }
+  .newsletter-band__form input[type="email"] {
+    border-right: 1px solid var(--black-border);
+    border-bottom: 1px solid var(--black-border);
+  }
+
+  /* Footer */
+  .footer__inner              { grid-template-columns: 1fr; gap: 40px; }
+  .footer__bottom             { flex-direction: column; text-align: center; }
+
+  /* Page hero */
+  .page-hero                  { padding: 140px 0 70px; }
+  .page-hero p                { font-size: 1rem; }
+
+  /* Forms */
+  .form-grid-2                { grid-template-columns: 1fr; }
+
+  /* Give */
+  .give-options               { grid-template-columns: 1fr !important; }
+
+  /* Full event card */
+  .full-event-card            { grid-template-columns: 80px 1fr; }
+  .full-event-card__action    { display: none; }
+
+  /* Recurring grid */
+  .recurring-grid             { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Pastor feature */
+  .pastor-feature             { grid-template-columns: 1fr; }
+  .pastor-feature__dark       { padding: 48px 28px; order: 2; }
+  .pastor-feature__photo      { min-height: 340px; order: 1; }
+
+  /* Grids */
+  .grid-2, .grid-3, .grid-4  { grid-template-columns: 1fr; }
+}
+
+/* ==========================================
+   MOBILE (max-width: 480px)
+   ========================================== */
+@media (max-width: 480px) {
+  .hero__title                { font-size: 3.8rem; }
+  .hero__title-accent         { font-size: 1.4rem; }
+
+  .expect-grid                { grid-template-columns: 1fr; }
+  .ministry-grid              { grid-template-columns: 1fr; }
+  .events-row                 { grid-template-columns: 1fr; }
+  .recurring-grid             { grid-template-columns: 1fr !important; }
+  .form-grid-2                { grid-template-columns: 1fr; }
+  .footer__inner              { grid-template-columns: 1fr; }
+
+  .history-stats              { grid-template-columns: 1fr 1fr; }
+
+  .btn-xl                     { padding: 18px 36px; font-size: 0.8rem; }
+
+  .page-hero                  { padding: 130px 0 60px; }
+
+  .filter-btn                 { padding: 8px 14px; font-size: 0.63rem; }
+
+  .full-event-card            { grid-template-columns: 70px 1fr; }
+
+  .sermon-card__play          { display: none; }
+}
+
+/* ==========================================
+   TOUCH DEVICE - Disable hover transforms
+   ========================================== */
+@media (hover: none) {
+  .ministry-card:hover,
+  .give-card:hover,
+  .belief-card:hover,
+  .sermon-card:hover,
+  .event-tile:hover,
+  .full-event-card:hover,
+  .recurring-card:hover,
+  .min-tile:hover,
+  .expect-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ==========================================
+   PRINT
+   ========================================== */
+@media print {
+  .navbar,
+  footer,
+  .newsletter-band,
+  .hero__ctas,
+  .quick-bar,
+  .cta-band { display: none; }
+
+  body { background: white; color: black; }
+  .page-hero { padding: 32px 0; }
+  .page-hero h1 { color: black; }
+  a { color: black; }
+}
