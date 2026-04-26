@@ -166,6 +166,13 @@
             <div class="field"><label>Category</label><input id="eventCategory" placeholder="worship, ministry, community" /></div>
             <div class="field"><label>Image URL (optional)</label><input id="eventImage" /></div>
             <div class="field">
+              <label>Or Upload Event Image</label>
+              <div class="row-actions">
+                <input id="eventImageFile" type="file" accept="image/*" />
+                <button class="btn-secondary" id="eventImageUploadBtn" type="button">Upload Image</button>
+              </div>
+            </div>
+            <div class="field">
               <label><input id="eventPublished" type="checkbox" checked style="width:auto;margin-right:8px;" /> Published</label>
             </div>
             <div class="row-actions">
@@ -184,6 +191,13 @@
             <div class="field"><label>Schedule</label><input id="ministrySchedule" /></div>
             <div class="field"><label>Leader Name</label><input id="ministryLeader" /></div>
             <div class="field"><label>Image URL (optional)</label><input id="ministryImage" /></div>
+            <div class="field">
+              <label>Or Upload Ministry Image</label>
+              <div class="row-actions">
+                <input id="ministryImageFile" type="file" accept="image/*" />
+                <button class="btn-secondary" id="ministryImageUploadBtn" type="button">Upload Image</button>
+              </div>
+            </div>
             <div class="field">
               <label><input id="ministryPublished" type="checkbox" checked style="width:auto;margin-right:8px;" /> Published</label>
             </div>
@@ -213,6 +227,7 @@
             <div class="field">
               <label>Profile UUID</label>
               <input id="dirProfileId" required />
+              <small class="muted">This is the Supabase Auth user ID. It is auto-created when a user signs up.</small>
             </div>
             <div class="field">
               <label>Display Name</label>
@@ -233,6 +248,13 @@
             <div class="field">
               <label>Photo URL</label>
               <input id="dirPhoto" />
+            </div>
+            <div class="field">
+              <label>Or Upload Directory Photo</label>
+              <div class="row-actions">
+                <input id="dirPhotoFile" type="file" accept="image/*" />
+                <button class="btn-secondary" id="dirPhotoUploadBtn" type="button">Upload Photo</button>
+              </div>
             </div>
           </div>
           <div class="field"><label>Bio</label><textarea id="dirBio"></textarea></div>
@@ -321,9 +343,31 @@
       document.getElementById("dirVisible").checked = true;
     }
 
+    async function uploadImageToStorage(file, folderName) {
+      if (!file) throw new Error("Please choose an image file first.");
+      const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+      const safeExt = ext.replace(/[^a-z0-9]/g, "") || "jpg";
+      const filePath = folderName + "/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + safeExt;
+
+      const { error: uploadError } = await window.supabaseClient
+        .storage
+        .from("site-images")
+        .upload(filePath, file, { upsert: false });
+
+      if (uploadError) {
+        throw new Error(
+          uploadError.message +
+          " (Ensure a public Supabase Storage bucket named 'site-images' exists and upload policy allows authenticated admins.)"
+        );
+      }
+
+      const { data } = window.supabaseClient.storage.from("site-images").getPublicUrl(filePath);
+      return data.publicUrl;
+    }
+
     async function enforceAdmin() {
       if (!window.supabaseClient || !window.authApi) {
-        setStatus("Supabase is not initialized. Check js/supabase-config.js.", true);
+        setStatus("Supabase is not initialized. Check js/supabase-public-config.js.", true);
         showAuth();
         return;
       }
@@ -468,6 +512,42 @@
     document.getElementById("eventCancelEditBtn").addEventListener("click", clearEventForm);
     document.getElementById("ministryCancelEditBtn").addEventListener("click", clearMinistryForm);
     document.getElementById("directoryCancelEditBtn").addEventListener("click", clearDirectoryForm);
+
+    document.getElementById("eventImageUploadBtn").addEventListener("click", async () => {
+      try {
+        setAdminStatus("Uploading event image...");
+        const file = document.getElementById("eventImageFile").files[0];
+        const url = await uploadImageToStorage(file, "events");
+        document.getElementById("eventImage").value = url;
+        setAdminStatus("Event image uploaded.");
+      } catch (err) {
+        setAdminStatus(err.message || "Failed to upload event image.", true);
+      }
+    });
+
+    document.getElementById("ministryImageUploadBtn").addEventListener("click", async () => {
+      try {
+        setAdminStatus("Uploading ministry image...");
+        const file = document.getElementById("ministryImageFile").files[0];
+        const url = await uploadImageToStorage(file, "ministries");
+        document.getElementById("ministryImage").value = url;
+        setAdminStatus("Ministry image uploaded.");
+      } catch (err) {
+        setAdminStatus(err.message || "Failed to upload ministry image.", true);
+      }
+    });
+
+    document.getElementById("dirPhotoUploadBtn").addEventListener("click", async () => {
+      try {
+        setAdminStatus("Uploading directory photo...");
+        const file = document.getElementById("dirPhotoFile").files[0];
+        const url = await uploadImageToStorage(file, "directory");
+        document.getElementById("dirPhoto").value = url;
+        setAdminStatus("Directory photo uploaded.");
+      } catch (err) {
+        setAdminStatus(err.message || "Failed to upload directory photo.", true);
+      }
+    });
 
     document.getElementById("eventForm").addEventListener("submit", async (e) => {
       e.preventDefault();

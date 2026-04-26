@@ -34,6 +34,14 @@ This creates:
 - RLS policies for public/member/admin behavior
 - auto profile + directory record creation on sign-up
 
+## 3b) Enable image uploads from admin dashboard
+
+Run `supabase/storage-policies.sql` in Supabase SQL Editor.
+
+This creates a public bucket named `site-images` and policies so:
+- everyone can view images
+- only authenticated admins can upload/update/delete images
+
 ## 4) Make first admin user
 
 1. Sign up a user in Supabase Auth (or your future login page).
