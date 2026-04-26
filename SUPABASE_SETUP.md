@@ -8,10 +8,8 @@
 
 ## 2) Create local frontend config
 
-1. Copy `js/supabase-config.example.js` to `js/supabase-config.js`.
-2. Fill in:
-   - `url`: your Supabase project URL
-   - `anonKey`: your Supabase anon public key
+Use `js/supabase-public-config.js` for production/public config.
+It is safe to commit because the anon key is public by design.
 
 Example:
 
@@ -53,7 +51,7 @@ Add scripts in pages that need auth/data:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-config.js"></script>
+<script src="js/supabase-public-config.js"></script>
 <script src="js/supabase-client.js"></script>
 ```
 
